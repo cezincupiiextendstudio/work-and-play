@@ -14,22 +14,104 @@ import { compose } from 'redux';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectAchievementsPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
+
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import messages from './messages';
+import saga from './saga';
+import reducer from './reducer';
+import makeSelectAchievementsPage from './selectors';
+import Achievement from '../../components/Achievement';
+import AvatarImg from '../../images/avatar.png';
+
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+  },
+  media: {
+    height: 140,
+  },
+  cardGrid: {
+    margin: '25px',
+  },
+});
 
 export function AchievementsPage() {
   useInjectReducer({ key: 'achievementsPage', reducer });
   useInjectSaga({ key: 'achievementsPage', saga });
 
+  const classes = useStyles();
+  console.log(require('../../images/avatar.png'));
   return (
     <div>
       <Helmet>
         <title>AchievementsPage</title>
         <meta name="description" content="Description of AchievementsPage" />
       </Helmet>
-      <FormattedMessage {...messages.header} />
+      <Grid
+        container
+        direction="row"
+        spacing={3}
+        justify="center"
+        className={classes.cardGrid}
+      >
+        <Grid item xs={12} md={4}>
+          <Achievement
+            title="Safari"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            image="https://upload.wikimedia.org/wikipedia/commons/7/73/Lion_waiting_in_Namibia.jpg"
+            points={250}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Achievement
+            title="Birthday party"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            image="https://rockymountevents.com/wp-content/uploads/2018/09/birthday_celebration.jpg"
+            points={100}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Achievement
+            title="Climbing"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            image="https://mountaintrip.com/wp-content/uploads/2017/08/IMG_0002-e1519067218755.jpg"
+            points={125}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Achievement
+            title="Salarial bonus"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            image="https://images.barrons.com/im-200212?width=1280&size=1.77777778"
+            points={200}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Achievement
+            title="Skydiving"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            image="https://checkyeti.imgix.net/images/optimized/tandem-skydive-from-3000m-in-split-skydiving-tandem-group.jpg"
+            points={190}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Achievement
+            title="Beach vacation"
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras volutpat, sapien a lobortis gravida, nisi magna blandit mi, a venenatis velit neque id metus. Praesent et libero euismod, rhoncus dui et, volutpat diam. In hac habitasse platea dictumst. Duis eleifend dui congue metus ultrices, sit amet suscipit nisi suscipit."
+            image="https://pix10.agoda.net/hotelImages/301716/-1/fe9724d8fb4da3dd4590353bd771a276.jpg?s=1024x768"
+            points={300}
+          />
+        </Grid>
+      </Grid>
     </div>
   );
 }

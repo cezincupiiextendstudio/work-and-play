@@ -89,21 +89,19 @@ export function HomePage({
           content="A React.js Boilerplate application homepage"
         />
       </Helmet>
-        <BrowserRouter>
-          <Navigation />
-          <Switch>
-            <Route path="/sprint" component={SprintPage} />
-            <Route path="/chat" component={ChatPage} />
-            <Route path="/achievements" component={AchievementsPage} />
-            <Route path="/team" component={TeamPage} />
-            <Route path="/activities" component={ActivitiesPage} />
-            <Route path="/dashboard" component={DashboardPage} />
-          </Switch>
-        </BrowserRouter>
+      <BrowserRouter>
+        <Navigation />
 
-
-
-
+        <Switch>
+          <Route exact path="/" component={SprintPage} />
+          <Route path="/sprint" component={SprintPage} />
+          <Route path="/chat" component={ChatPage} />
+          <Route path="/achievements" component={AchievementsPage} />
+          <Route path="/team" component={TeamPage} />
+          <Route path="/activities" component={ActivitiesPage} />
+          <Route path="/dashboard" component={DashboardPage} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }

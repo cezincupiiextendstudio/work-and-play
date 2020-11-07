@@ -137,7 +137,10 @@ function Task() {
                   <img src={AvatarPng} className={classes.Avatar} />
                 </TableCell>
                 <TableCell align="right">
-                  <Select className="status-container">
+                  <Select
+                    className="status-container"
+                    style={{ backgroundColor: statusColor }}
+                  >
                     {priorityOp.map((value, index) => (
                       <MenuItem
                         value={value.value}
@@ -151,7 +154,10 @@ function Task() {
                   </Select>
                 </TableCell>
                 <TableCell align="right">
-                  <Select className="status-container">
+                  <Select
+                    className="status-container"
+                    defaultValue="notstarted"
+                  >
                     {statusOp.map((value, index) => (
                       <MenuItem
                         value={value.value}

@@ -36,6 +36,7 @@ import reducer from './reducer';
 import makeSelectLoginPage from './selectors';
 
 import Background from '../../images/background.jpg';
+import login from '../../utils/useUsers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -73,6 +74,16 @@ export function LoginPage() {
   useInjectSaga({ key: 'loginPage', saga });
 
   const classes = useStyles();
+
+  const onClickHandler = async event => {
+    event.preventDefault();
+    const response = await login('test@test.com', 'test');
+    localStorage.setItem(
+      'access_token',
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJ0b2tlbl92ZXJzaW9uIjoxLCJleHAiOjE2MDQ5Mzc4NjUsImlhdCI6MTYwNDc2NDc2NX0.wvgNDM9Ug-MmFnpXTdJ19ZSeUGR6CnaIfEoi5GttT2k',
+    );
+    console.log('LOGIN RESPONSE:', response);
+  };
 
   return (
     <div className={classes.root}>
@@ -120,6 +131,7 @@ export function LoginPage() {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={onClickHandler}
             >
               Sign In
             </Button>

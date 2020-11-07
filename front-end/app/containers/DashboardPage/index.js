@@ -44,6 +44,9 @@ const useStyles = makeStyles(theme => ({
   fixedHeight: {
     height: 240,
   },
+  alignCenter: {
+    justifyContent: 'center',
+  },
 }));
 
 export function DashboardPage() {
@@ -52,6 +55,7 @@ export function DashboardPage() {
   const classes = useStyles();
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedHeightAlignedPaper = clsx(fixedHeightPaper, classes.alignCenter);
 
   return (
     <div>
@@ -71,7 +75,7 @@ export function DashboardPage() {
             </Grid>
             {/* Recent Deposits */}
             <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
+              <Paper className={fixedHeightAlignedPaper}>
                 <Points />
               </Paper>
             </Grid>
