@@ -5,7 +5,7 @@
  */
 
 import React, { memo } from 'react';
-import './index.scss'
+import './index.scss';
 
 import { useTheme } from '@material-ui/core/styles';
 import {
@@ -54,7 +54,7 @@ function Chart() {
               position="left"
               style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
             >
-              Sales ($)
+              Points
             </Label>
           </YAxis>
           <Line

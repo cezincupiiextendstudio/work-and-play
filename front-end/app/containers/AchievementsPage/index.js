@@ -16,12 +16,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import messages from './messages';
@@ -30,6 +25,7 @@ import reducer from './reducer';
 import makeSelectAchievementsPage from './selectors';
 import Achievement from '../../components/Achievement';
 import AvatarImg from '../../images/avatar.png';
+import './index.scss';
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +36,10 @@ const useStyles = makeStyles({
   },
   cardGrid: {
     margin: '25px',
+  },
+  achievementText: {
+    margin: '35px',
+    fontFamily: 'sans-serif',
   },
 });
 
@@ -55,6 +55,9 @@ export function AchievementsPage() {
         <title>AchievementsPage</title>
         <meta name="description" content="Description of AchievementsPage" />
       </Helmet>
+      <Typography variant="h3" align="center" className="achievements-typo">
+        ACHIEVEMENTS
+      </Typography>
       <Grid
         container
         direction="row"

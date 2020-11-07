@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
@@ -21,9 +21,11 @@ import Avatar from '@material-ui/core/Avatar';
 import { Select } from '@material-ui/core';
 import StarIcon from '@material-ui/icons/Star';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import AvatarPng from '../../images/avatar.png';
 
 import './index.scss';
+import { useApi } from '../../utils/useApi';
 
 function createData(name, user, priority, status, points) {
   return { name, user, priority, status, points };
@@ -91,17 +93,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const statusOp = [
-  { id: 1, text: 'Not started', value: 'none', color: 'white' },
-  { id: 2, text: 'Working on it', value: 'working', color: 'orange' },
-  { id: 3, text: 'Stuck', value: 'stuck', color: 'red' },
-  { id: 4, text: 'Done', value: 'done', color: 'green' },
+  { id: 1, text: 'Not started', value: '', color: 'white' },
+  { id: 2, text: 'Working on it', value: 10, color: 'orange' },
+  { id: 3, text: 'Stuck', value: 20, color: 'red' },
+  { id: 4, text: 'Done', value: 30, color: 'green' },
 ];
 
 const priorityOp = [
-  { text: 'Low', value: 'low' },
-  { text: 'Medium', value: 'medium' },
-  { text: 'High', value: 'high' },
-  { text: 'Critical', value: 'critical' },
+  { text: 'Low', value: '' },
+  { text: 'Medium', value: '10' },
+  { text: 'High', value: '15' },
+  { text: 'Critical', value: '20' },
 ];
 
 function Task() {
@@ -113,74 +115,108 @@ function Task() {
     setStatusColor(value.id);
   };
 
+  const [data, setData] = useState({});
+  const [dataSprint, setDataSprint] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { ok, data, error } = await useApi({ url: 'sprint-details/1/' });
+      console.log(ok, data, error);
+      if (ok) {
+        console.log('data: ', data);
+        setData(data);
+        setDataSprint(data.sprint_tasks);
+      }
+    }
+
+    fetchData();
+    console.log('data1: ', data);
+  }, []);
+  if (data) {
+    console.log('DATA SPRINT TASK:', dataSprint);
+  }
+  console.log('PRIORITY OP:', priorityOp);
+
   return (
     <>
-      <TableContainer>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">User</TableCell>
-              <TableCell align="right">Priority</TableCell>
-              <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Points</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">
-                  {/* <Avatar src={row.user} /> */}
-                  <img src={AvatarPng} className={classes.Avatar} />
-                </TableCell>
-                <TableCell align="right">
-                  <Select
-                    className="status-container"
-                    style={{ backgroundColor: statusColor }}
-                  >
-                    {priorityOp.map((value, index) => (
-                      <MenuItem
-                        value={value.value}
-                        onClick={() => {
-                          onChange(value);
-                        }}
-                      >
-                        {value.text}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </TableCell>
-                <TableCell align="right">
-                  <Select
-                    className="status-container"
-                    defaultValue="notstarted"
-                  >
-                    {statusOp.map((value, index) => (
-                      <MenuItem
-                        value={value.value}
-                        onClick={() => {
-                          onChange(value);
-                        }}
-                      >
-                        {value.text}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </TableCell>
-                <TableCell align="right">
-                  <Grid container alignItems="center" justify="flex-end">
-                    <StarIcon className={classes.stars} />
-                    {row.points}
-                  </Grid>
-                </TableCell>
+      {dataSprint ? (
+        <TableContainer>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell align="right">User</TableCell>
+                <TableCell align="right">Priority</TableCell>
+                <TableCell align="right">Status</TableCell>
+                <TableCell align="right">Points</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {dataSprint.map(row => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">
+                    {/* <Avatar src={row.user} /> */}
+                    <img
+                      src={row.user.user_profile.image}
+                      className={classes.Avatar}
+                    />
+                  </TableCell>
+                  <TableCell align="right">
+                    <Select
+                      className="status-container"
+                      style={{ backgroundColor: statusColor }}
+                      displayEmpty
+                    >
+                      <MenuItem value="">
+                        <em>select the value</em>
+                      </MenuItem>
+                      {priorityOp.map((value, index) => (
+                        <MenuItem
+                          value={value.value}
+                          onClick={() => {
+                            onChange(value);
+                          }}
+                        >
+                          {value.text}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Select
+                      className="status-container"
+                      defaultValue="notstarted"
+                      displayEmpty
+                    >
+                      {statusOp.map((value, index) => (
+                        <MenuItem
+                          value={value.value}
+                          onClick={() => {
+                            onChange(value);
+                          }}
+                        >
+                          {value.text}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Grid container alignItems="center" justify="flex-end">
+                      <StarIcon className={classes.stars} />
+                      {row.points}
+                    </Grid>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <CircularProgress />
+      )}
     </>
   );
 }

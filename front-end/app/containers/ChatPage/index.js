@@ -54,7 +54,7 @@ function ChatRoom() {
 
   return (
     <>
-      <main>
+      <main className="chat-main">
         {messages &&
           messages.map(msg => (
             <ChatMessage key={msg.id} message={msg.message} />
@@ -63,14 +63,15 @@ function ChatRoom() {
         <span ref={dummy} />
       </main>
 
-      <form onSubmit={sendMessage}>
+      <form onSubmit={sendMessage} className="chat-form">
         <input
           value={formValue}
           onChange={e => setFormValue(e.target.value)}
-          placeholder="say something nice"
+          placeholder="Send a message"
+          className="chat-input"
         />
 
-        <button type="submit" disabled={!formValue}>
+        <button type="submit" disabled={!formValue} className="chat-button">
           Submit
         </button>
       </form>
@@ -82,12 +83,12 @@ function ChatMessage(props) {
   // const { text, uid, photoURL } = props.message;
   //
   // const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
-
+  const messageClass = 'sent';
   return (
     <>
-      <div className="message">
-        <img src="https://i.ytimg.com/vi/6PbVDuf7FfQ/maxresdefault.jpg" />
-        <p>{props.message}</p>
+      <div className={`message ${messageClass}`}>
+        <img src="https://pbs.twimg.com/profile_images/1194113737092935681/63O1znGw.jpg" />
+        <p className="chat-message">{props.message}</p>
       </div>
     </>
   );

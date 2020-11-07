@@ -46,9 +46,9 @@ const useStyles = makeStyles(theme => ({
 function Achievement(props) {
   console.log('Ach props:', props);
   const classes = useStyles();
-  const { title, content, image, points } = props;
+  const { title, content, image, points, className, isAchievement } = props;
   return (
-    <div>
+    <div className={className}>
       <Card className={classes.root}>
         <CardActionArea>
           <CardMedia className={classes.media} image={image} title={title} />
@@ -61,35 +61,37 @@ function Achievement(props) {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions>
-          <Tooltip title="Redeem">
-            <Button
-              disableRipple
-              className={classes.redeem}
-              size="medium"
-              color="primary"
-              startIcon={<CheckCircleIcon />}
-            />
-          </Tooltip>
-          <Tooltip title="Delete">
-            <Button
-              disableRipple
-              size="medium"
-              color="primary"
-              className={classes.delete}
-              startIcon={<HighlightOffIcon />}
-            />
-          </Tooltip>
-          <Grid
-            container
-            justify="flex-end"
-            alignItems="center"
-            className={classes.cardPoints}
-          >
-            <StarIcon className={classes.star} fontSize="inherit" />
-            {points}
-          </Grid>
-        </CardActions>
+        {!isAchievement && (
+          <CardActions>
+            <Tooltip title="Redeem">
+              <Button
+                disableRipple
+                className={classes.redeem}
+                size="medium"
+                color="primary"
+                startIcon={<CheckCircleIcon />}
+              />
+            </Tooltip>
+            <Tooltip title="Delete">
+              <Button
+                disableRipple
+                size="medium"
+                color="primary"
+                className={classes.delete}
+                startIcon={<HighlightOffIcon />}
+              />
+            </Tooltip>
+            <Grid
+              container
+              justify="flex-end"
+              alignItems="center"
+              className={classes.cardPoints}
+            >
+              <StarIcon className={classes.star} fontSize="inherit" />
+              {points}
+            </Grid>
+          </CardActions>
+        )}
       </Card>
     </div>
   );

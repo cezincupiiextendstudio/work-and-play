@@ -25,7 +25,7 @@ export const useApi = async ({
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJ0b2tlbl92ZXJzaW9uIjoxLCJleHAiOjE2MDQ5Mzc4NjUsImlhdCI6MTYwNDc2NDc2NX0.wvgNDM9Ug-MmFnpXTdJ19ZSeUGR6CnaIfEoi5GttT2k`,
+        Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJ0b2tlbl92ZXJzaW9uIjo2LCJleHAiOjE2MDQ5NDEyNzEsImlhdCI6MTYwNDc2ODE3MX0.vggK8O2jU8AV41gVxPcJg-738chCGuc6o7MYb-C4p4w`,
 
         'X-CSRFToken':
           'ZOHjHcafzTKzROFBTYpy3IkfgRe9oatsFrFUTZ0Hsm2DaRjsaX9Q0jcsHxb0DiHx',
@@ -55,5 +55,5 @@ export const useApi = async ({
     }
   }
 
-  return { apiResponse };
+  return apiResponse;
 };

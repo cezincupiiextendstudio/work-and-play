@@ -24,12 +24,22 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import makeSelectSprintPage from './selectors';
-import reducer from './reducer';
-import saga from './saga';
-import messages from './messages';
-import Task from '../../components/Task';
+import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+import { Select } from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import StarIcon from '@material-ui/icons/Star';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useApi } from '../../utils/useApi';
+import Task from '../../components/Task';
+import messages from './messages';
+import saga from './saga';
+import reducer from './reducer';
+import makeSelectSprintPage from './selectors';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -66,6 +76,24 @@ const useStyles = makeStyles(theme => ({
     width: '100px',
     marginTop: '20px',
   },
+  table: {
+    // minWidth: 500,
+  },
+  tableContainer: {
+    margin: '15px',
+  },
+  Avatar: {
+    borderRadius: '50%',
+    width: '40px',
+    height: '40px',
+  },
+  form: {
+    minWidth: 120,
+  },
+  stars: {
+    marginRight: '5px',
+    color: theme.palette.primary.main,
+  },
 }));
 
 export function SprintPage() {
@@ -74,11 +102,33 @@ export function SprintPage() {
   useInjectSaga({ key: 'sprintPage', saga });
   const [open, setOpen] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [age, setAge] = React.useState('');
+  const [statusColor, setStatusColor] = useState('');
+  const onChange = value => {
+    setAge(value.value);
+    setStatusColor(value.id);
+  };
 
-  useEffect(async () => {
-    const response = await useApi('sprint-details/');
-    console.log(response);
-  });
+  const [data, setData] = useState({});
+  const [dataSprint, setDataSprint] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { ok, data, error } = await useApi({ url: 'sprint-details/3/' });
+      console.log(ok, data, error);
+      if (ok) {
+        console.log('data: ', data);
+        setData(data);
+        setDataSprint(data.sprint_tasks);
+      }
+    }
+
+    fetchData();
+    console.log('data1: ', data);
+  }, []);
+  if (data) {
+    console.log('DATA SPRINT:', dataSprint);
+  }
 
   const handleOpen = () => {
     setOpen(true);
@@ -87,6 +137,20 @@ export function SprintPage() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const statusOp = [
+    { id: 1, text: 'Not started', value: '', color: 'white' },
+    { id: 2, text: 'Working on it', value: 10, color: 'orange' },
+    { id: 3, text: 'Stuck', value: 20, color: 'red' },
+    { id: 4, text: 'Done', value: 30, color: 'green' },
+  ];
+
+  const priorityOp = [
+    { text: 'Low', value: '' },
+    { text: 'Medium', value: '10' },
+    { text: 'High', value: '15' },
+    { text: 'Critical', value: '20' },
+  ];
 
   return (
     <div>
@@ -101,7 +165,88 @@ export function SprintPage() {
             {/* Recent Orders */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Task />
+                {dataSprint ? (
+                  <TableContainer>
+                    <Table className={classes.table} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Name</TableCell>
+                          <TableCell align="right">User</TableCell>
+                          <TableCell align="right">Priority</TableCell>
+                          <TableCell align="right">Status</TableCell>
+                          <TableCell align="right">Points</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {dataSprint.map(row => (
+                          <TableRow key={row.name}>
+                            <TableCell component="th" scope="row">
+                              {row.name}
+                            </TableCell>
+                            <TableCell align="right">
+                              {/* <Avatar src={row.user} /> */}
+                              <img
+                                src={row.user.user_profile.image}
+                                className={classes.Avatar}
+                              />
+                            </TableCell>
+                            <TableCell align="right">
+                              <Select
+                                className="status-container"
+                                style={{ backgroundColor: statusColor }}
+                                displayEmpty
+                              >
+                                <MenuItem value="">
+                                  <em>select the value</em>
+                                </MenuItem>
+                                {priorityOp.map((value, index) => (
+                                  <MenuItem
+                                    value={value.value}
+                                    onClick={() => {
+                                      onChange(value);
+                                    }}
+                                  >
+                                    {value.text}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Select
+                                className="status-container"
+                                defaultValue="notstarted"
+                                displayEmpty
+                              >
+                                {statusOp.map((value, index) => (
+                                  <MenuItem
+                                    value={value.value}
+                                    onClick={() => {
+                                      onChange(value);
+                                    }}
+                                  >
+                                    {value.text}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Grid
+                                container
+                                alignItems="center"
+                                justify="flex-end"
+                              >
+                                <StarIcon className={classes.stars} />
+                                {row.points}
+                              </Grid>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <CircularProgress />
+                )}
               </Paper>
             </Grid>
             <Grid
@@ -123,6 +268,13 @@ export function SprintPage() {
             </Grid>
           </Grid>
         </Container>
+        {/* {data ? ( */}
+        {/*  data.sprint_tasks.map(el => { */}
+        {/*    <p>{el.description}</p>; */}
+        {/*  }) */}
+        {/* ) : ( */}
+        {/*  <p>loading</p> */}
+        {/* )} */}
 
         <Modal
           aria-labelledby="transition-modal-title"
