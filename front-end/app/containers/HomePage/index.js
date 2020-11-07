@@ -4,14 +4,13 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
-
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import {
@@ -19,21 +18,43 @@ import {
   makeSelectLoading,
   makeSelectError,
 } from 'containers/App/selectors';
-import H2 from 'components/H2';
-import ReposList from 'components/ReposList';
-import AtPrefix from './AtPrefix';
-import CenteredSection from './CenteredSection';
-import Form from './Form';
-import Input from './Input';
-import Section from './Section';
-import messages from './messages';
-import { loadRepos } from '../App/actions';
-import { changeUsername } from './actions';
-import { makeSelectUsername } from './selectors';
-import reducer from './reducer';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+
+// Material UI
+
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+
+import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import saga from './saga';
+import reducer from './reducer';
+import { makeSelectUsername } from './selectors';
+import { changeUsername } from './actions';
+import { loadRepos } from '../App/actions';
+import Navigation from '../../components/Navigation';
+import { SprintPage } from '../SprintPage';
+import { ChatPage } from '../ChatPage';
+import { AchievementsPage } from '../AchievementsPage';
+import { TeamPage } from '../TeamPage';
+import { ActivitiesPage } from '../ActivitiesPage';
+import { DashboardPage } from '../DashboardPage';
 
 const key = 'home';
+
+const useStyles = makeStyles({
+  root: {
+    flexGrow: 1,
+  },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
+  logoutButton: {
+    marginRight: '10px',
+  },
+});
 
 export function HomePage({
   username,
@@ -51,6 +72,8 @@ export function HomePage({
     if (username && username.trim().length > 0) onSubmitForm();
   }, []);
 
+  // Handlers
+
   const reposListProps = {
     loading,
     error,
@@ -58,7 +81,7 @@ export function HomePage({
   };
 
   return (
-    <article>
+    <div>
       <Helmet>
         <title>Home Page</title>
         <meta
@@ -66,38 +89,22 @@ export function HomePage({
           content="A React.js Boilerplate application homepage"
         />
       </Helmet>
-      <div>
-        <CenteredSection>
-          <H2>
-            <FormattedMessage {...messages.startProjectHeader} />
-          </H2>
-          <p>
-            <FormattedMessage {...messages.startProjectMessage} />
-          </p>
-        </CenteredSection>
-        <Section>
-          <H2>
-            <FormattedMessage {...messages.trymeHeader} />
-          </H2>
-          <Form onSubmit={onSubmitForm}>
-            <label htmlFor="username">
-              <FormattedMessage {...messages.trymeMessage} />
-              <AtPrefix>
-                <FormattedMessage {...messages.trymeAtPrefix} />
-              </AtPrefix>
-              <Input
-                id="username"
-                type="text"
-                placeholder="mxstbr"
-                value={username}
-                onChange={onChangeUsername}
-              />
-            </label>
-          </Form>
-          <ReposList {...reposListProps} />
-        </Section>
-      </div>
-    </article>
+        <BrowserRouter>
+          <Navigation />
+          <Switch>
+            <Route path="/sprint" component={SprintPage} />
+            <Route path="/chat" component={ChatPage} />
+            <Route path="/achievements" component={AchievementsPage} />
+            <Route path="/team" component={TeamPage} />
+            <Route path="/activities" component={ActivitiesPage} />
+            <Route path="/dashboard" component={DashboardPage} />
+          </Switch>
+        </BrowserRouter>
+
+
+
+
+    </div>
   );
 }
 

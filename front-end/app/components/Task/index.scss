@@ -1,0 +1,14 @@
+.status-container{
+  min-width: 120px !important;
+  color:white;
+
+  .MuiSvgIcon-root.MuiSelect-icon {
+    display: none;
+  }
+
+  .MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiInputBase-input.MuiInput-input {
+    padding-right: 0 !important;
+    text-align: center;
+  }
+}
+

@@ -17,6 +17,12 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AboutPage from 'containers/AboutPage';
 import GlobalStyle from '../../global-styles';
 import { LoginPage } from '../LoginPage';
+import { SprintPage } from '../SprintPage';
+import { ChatPage } from '../ChatPage';
+import { AchievementsPage } from '../AchievementsPage';
+import { TeamPage } from '../TeamPage';
+import { ActivitiesPage } from '../ActivitiesPage';
+import { DashboardPage } from '../DashboardPage';
 const AppWrapper = styled.div`
   max-width: 100%;
   margin: 0 auto;
@@ -38,8 +44,13 @@ export default function App() {
       {/* <Header /> */}
       <Switch>
         <Route exact path="/" component={HomePage} />
-        <Route path="/about" component={AboutPage} />
         <Route path="/login" component={LoginPage} />
+        <Route path="/sprint" component={SprintPage} />
+        <Route path="/chat" component={ChatPage} />
+        <Route path="/achievements" component={AchievementsPage} />
+        <Route path="/team" component={TeamPage} />
+        <Route path="/activities" component={ActivitiesPage} />
+        <Route path="/dashboard" component={DashboardPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
       {/* <Footer /> */}
