@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
@@ -18,15 +18,42 @@ import makeSelectChatPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import './index.scss';
+import { useApi } from '../../utils/useApi';
 
 const messages = [
   { id: 0, user: 'Cezin', chat: 'dev', message: 'Salut', date: '24/10/2020' },
-  { id: 1, user: 'Cezin', chat: 'dev', message: 'Salut', date: '24/10/2020' },
-  { id: 2, user: 'Cezin', chat: 'dev', message: 'Salut', date: '24/10/2020' },
-  { id: 3, user: 'Cezin', chat: 'dev', message: 'Salut', date: '24/10/2020' },
+  {
+    id: 1,
+    user: 'Cezin',
+    chat: 'dev',
+    message: 'Am si eu nevoie de niste ajutor',
+    date: '24/10/2020',
+  },
+  { id: 2, user: 'Cezin', chat: 'dev', message: 'Imediat', date: '24/10/2020' },
+  {
+    id: 3,
+    user: 'Cezin',
+    chat: 'dev',
+    message: 'Ai rezolvat ?',
+    date: '24/10/2020',
+  },
 ];
 function ChatRoom() {
   const dummy = useRef();
+  const [data, setData] = useState({});
+  useEffect(() => {
+    async function fetchData() {
+      const { ok, data, error } = await useApi({ url: 'chat-messages/' });
+      console.log(ok, data, error);
+      if (ok) {
+        console.log('Chat data: ', data);
+        setData(data);
+      }
+    }
+
+    fetchData();
+    console.log('data1: ', data);
+  }, []);
 
   const [formValue, setFormValue] = useState('');
 
@@ -55,9 +82,9 @@ function ChatRoom() {
   return (
     <>
       <main className="chat-main">
-        {messages &&
-          messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg.message} />
+        {data &&
+          Object.keys(data).map(msg => (
+            <ChatMessage key={msg.created_at} message={msg.content} />
           ))}
 
         <span ref={dummy} />
