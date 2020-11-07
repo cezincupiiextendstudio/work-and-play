@@ -16,12 +16,13 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import AboutPage from 'containers/AboutPage';
 import GlobalStyle from '../../global-styles';
+import { LoginPage } from '../LoginPage';
 const AppWrapper = styled.div`
-  max-width: calc(768px + 16px * 2);
+  max-width: 100%;
   margin: 0 auto;
   display: flex;
   min-height: 100%;
-  padding: 0 16px;
+  height: 100vh;
   flex-direction: column;
 `;
 
@@ -34,13 +35,14 @@ export default function App() {
       >
         <meta name="description" content="A React.js Boilerplate application" />
       </Helmet>
-      {/*<Header />*/}
+      {/* <Header /> */}
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
+        <Route path="/login" component={LoginPage} />
         <Route path="" component={NotFoundPage} />
       </Switch>
-      {/*<Footer />*/}
+      {/* <Footer /> */}
       <GlobalStyle />
     </AppWrapper>
   );
